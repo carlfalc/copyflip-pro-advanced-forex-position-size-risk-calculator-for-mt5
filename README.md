@@ -1,0 +1,2 @@
+# copyflip-pro-advanced-forex-position-size-risk-calculator-for-mt5
+CopyFlip Pro is an MT5 Expert Advisor that automatically calculates optimal position sizes based on account balance, risk tolerance, and currency pair volatility. Unlike basic calculators, it adapts position sizing in real-time based on market conditions, time of day, and economic calendar events, helping retail forex traders preserve capital durin
