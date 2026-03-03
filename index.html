@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopyFlip Pro - Advanced Forex Position Size & Risk Calculator for MT5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 54, 93, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #38a169;
+        }
+        
+        .nav-cta {
+            background: #38a169;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .nav-cta:hover {
+            background: #2f855a;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 8rem 0 5rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            background: #38a169;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #2f855a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #38a169;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #1a365d;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #38a169;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a365d;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 0;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #1a365d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+        
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a365d;
+        }
+        
+        /* Pricing */
+        .pricing {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .pricing-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid #38a169;
+            transform: scale(1.05);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #38a169;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1a365d;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #38a169;
+            margin-bottom: 1rem;
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 400;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+        
+        .features-list li:before {
+            content: "✓";
+            color: #38a169;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 0;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: #1a365d;
+        }
+        
+        .testimonial-role {
+            font-size: 0.9rem;
+            color: #38a169;
+        }
+        
+        /* FAQ */
+        .faq {
+            padding: 5rem 0;
+            background: #f8f9fa;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: #1a365d;
+            cursor: pointer;
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: #666;
+        }
+        
+        /* Email Signup */
+        .email-signup {
+            padding: 5rem 0;
+            background: #1a365d;
+            color: white;
+            text-align: center;
+        }
+        
+        .signup-form {
+            display: flex;
+            max-width: 500px;
+            margin: 2rem auto 0;
+            gap: 1rem;
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .signup-button {
+            background: #38a169;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .signup-button:hover {
+            background: #2f855a;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1a365d;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #38a169;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .signup-form {
+                flex-direction: column;
+            }
+            
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">CopyFlip Pro</div>
+            <ul class="nav-menu">
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li><a href="#faq" class="nav-link">FAQ</a></li>
+                <li><a href="#signup" class="nav-cta">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Stop Losing Money to Poor Position Sizing</h1>
+            <p>CopyFlip Pro uses advanced algorithms to calculate optimal forex position sizes in real-time, adapting to market volatility, news events, and correlation changes to protect your capital.</p>
+            <a href="#pricing" class="cta-button">Start Free Trial</a>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">73%</div>
+                    <div class="stat-label">Risk Reduction</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">2,500+</div>
+                    <div class="stat-label">Active Traders</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">99.8%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Why CopyFlip Pro Outperforms Static Calculators</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-Time Volatility Adaptation</h3>
+                    <p>Unlike fixed calculators, our EA continuously monitors market volatility and adjusts position sizes dynamically. During Asian session low liquidity or news spikes, your risk stays consistent while others get burned.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🗓️</div>
+                    <h3>Economic Calendar Integration</h3>
+                    <p>Automatically reduces position sizes 30 minutes before high-impact news events. No more account blow-ups from NFP surprises or central bank announcements that catch you off-guard.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3>Multi-Pair Correlation Analysis</h3>
+                    <p>Prevents over-exposure by analyzing correlations between your open positions. When EUR/USD and GBP/USD move together during risk-off periods, we automatically adjust sizing to prevent portfolio concentration.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Machine Learning Optimization</h3>
+                    <p>Our algorithms learn from time-of-day volatility patterns and market behavior to predict optimal position sizes. What worked in London session may be too risky for New York overlap.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install & Configure</h3>
+                    <p>Download the EA, install on MT5, and set your risk tolerance. Our setup wizard guides you through optimal settings for your account size and trading style.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Real-Time Analysis</h3>
+                    <p>CopyFlip Pro continuously monitors volatility, spreads, correlations, and economic calendar events to calculate the safest position size for each trade opportunity.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Automated Execution</h3>
+                    <p>When you place a trade, the EA automatically adjusts your lot size based on current market conditions. Your risk stays consistent regardless of market chaos.</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Continuous Learning</h3>
+                    <p>Our cloud-based algorithms improve over time, learning from market patterns and user performance to deliver increasingly accurate position sizing recommendations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Choose Your Plan</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$29<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>Single pair position sizing</li>
+                        <li>Basic volatility adjustment</li>
+                        <li>Email alerts</li>
+                        <li>Standard support</li>
+                        <li>MT5 integration</li>
+                    </ul>
+                    <a href="#" class="cta-button">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3>Professional</h3>
+                    <div class="price">$79<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>Multi-pair correlation analysis</li>
+                        <li>Economic calendar integration</li>
+                        <li>Custom risk profiles</li>
+                        <li>Telegram alerts</li>
+                        <li>Advanced volatility models</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Start Free Trial</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Institutional</h3>
+                    <div class="price">$199<span>/month</span></div>
+                    <ul class="features-list">
+                        <li>Portfolio-wide risk management</li>
+                        <li>API access</li>
+                        <li>Custom indicators</li>
+                        <li>Multi-account support</li>
+                        <li>White-label options</li>
+                        <li>Dedicated support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Start Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Professional Traders Say</h2>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text">"I was skeptical about another position sizing tool, but CopyFlip Pro saved my account during the March volatility spike. The economic calendar integration is game-changing."</p>
+                    <div class="testimonial-author">Marcus Chen</div>
+                    <div class="testimonial-role">Prop Trader, $50K Account</div>
+                </div>
+                
+                <div class="testimonial">
+                    <p class="testimonial-text">"Finally, a tool that understands correlation risk. My EUR and GBP positions were perfectly sized during Brexit volatility. Worth every penny for serious traders."</p>
+                    <div class="testimonial-author">Sarah Mitchell</div>
+                    <div class="testimonial-role">Forex Educator, 12 Years Experience</div>
+                </div>
+                
+                <div class="testimonial">
+                    <p class="testimonial-text">"The machine learning adaptation is incredible. It learned my trading patterns and now suggests position sizes that feel perfectly calibrated to my risk tolerance."</p>
+                    <div class="testimonial-author">James Rodriguez</div>
+                    <div class="testimonial-role">Fund Manager, $2M AUM</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">Does CopyFlip Pro work with all MT5 brokers?</div>
+                    <div class="faq-answer">Yes, CopyFlip Pro is compatible with any MT5 broker. The EA works independently of your broker's platform and doesn't require special API access.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">How is this different from the built-in MT5 position calculator?</div>
+                    <div class="faq-answer">MT5's basic calculator uses static inputs and doesn't adapt to changing market conditions. CopyFlip Pro continuously monitors volatility, correlations, news events, and market sessions to dynamically adjust position sizes in real-time.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">What's the minimum account size to benefit from this tool?</div>
+                    <div class="faq-answer">While there's no technical minimum, CopyFlip Pro is designed for traders with $10,000+ accounts who trade multiple pairs regularly. Smaller accounts may not see significant benefits from the advanced correlation and volatility features.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Can I use this for copy trading or signal following?</div>
+                    <div class="faq-answer">Absolutely. Many signal providers use CopyFlip Pro to ensure their followers don't over-risk their accounts. The tool automatically adjusts signal position sizes based on each follower's account balance and risk tolerance.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">Is there a money-back guarantee?</div>
+                    <div class="faq-answer">Yes, we offer a 30-day money-back guarantee. If CopyFlip Pro doesn't improve your risk management within the first month, we'll refund your subscription completely.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email Signup -->
+    <section id="signup" class="email-signup">
+        <div class="container">
+            <h2>Ready to Transform Your Risk Management?</h2>
+            <p>Join 2,500+ professional traders who trust CopyFlip Pro to protect their capital</p>
+            
+            <form class="signup-form">
+                <input type="email" class="email-input" placeholder="Enter your email address" required>
+                <button type="submit" class="signup-button">Start Free Trial</button>
+            </form>
+            
+            <p style="margin-top: 1rem; opacity: 0.8; font-size: 0.9rem;">No credit card required. 14-day free trial on all plans.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Support</a>
+                <a href="#" class="footer-link">Documentation</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+            
+            <p>&copy; 2024 CopyFlip Pro. All rights reserved. Trading forex carries risk of substantial losses.</p>
+        </div>
+    </footer>
+</body>
+</html>
